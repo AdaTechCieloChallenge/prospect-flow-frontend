@@ -3,6 +3,14 @@
 To this project I am using this stack to quickly develop an user interface.
 Follow the instructions below to get it up and running in your local machine.
 
+If clone, just run locally after the cloning process:
+
+```bash
+npm install
+```
+Its is going to install all dependencies required.
+To scaffold, considering this documentation.
+
 ## React + TypeScript + Vite + Shadcn/ui + Tailwind
 
 ```bash
