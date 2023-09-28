@@ -9,7 +9,7 @@ If clone, just run locally after the cloning process:
 npm install
 ```
 Its is going to install all dependencies required.
-To scaffold, considering this documentation.
+To scaffold, keep reading.
 
 ## React + TypeScript + Vite + Shadcn/ui + Tailwind
 
