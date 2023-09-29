@@ -3,12 +3,12 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "@/components/ui/accordion"
-import {SearchClientComponent} from "@/api-components/SearchClientComponent.tsx";
-import {RegisterComponent} from "@/api-components/RegisterComponent.tsx";
-import {EditProspectComponent} from "@/api-components/EditProspectComponent.tsx";
-import { ExcludeProspectComponent } from "@/api-components/ExcludeProspectComponent.tsx";
-import {DisplayEnqueuedProspectsComponent} from "@/api-components/DisplayEnqueuedProspectsComponent.tsx";
+} from "@/components/ui/accordion.tsx"
+import {SearchClientComponent} from "@/old/api-components/SearchClientComponent.tsx";
+import {RegisterComponent} from "@/old/api-components/RegisterComponent.tsx";
+import {EditProspectComponent} from "@/old/api-components/EditProspectComponent.tsx";
+import { ExcludeProspectComponent } from "@/old/api-components/ExcludeProspectComponent.tsx";
+import {DisplayEnqueuedProspectsComponent} from "@/old/api-components/DisplayEnqueuedProspectsComponent.tsx";
 
 export function AccordionHomePageWaiAriaPattern() {
     return (
