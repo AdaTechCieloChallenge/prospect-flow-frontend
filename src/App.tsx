@@ -1,30 +1,25 @@
-import "tailwindcss/base.css";
-import "tailwindcss/components.css";
-import "tailwindcss/utilities.css";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useState } from 'react'
 
-import {AccordionHomePageWaiAriaPattern} from "@/api-components/AccordionHomePageWaiAriaPattern.tsx";
+import { Dashboard } from './pages/dashboard'
 
 function App() {
-  // const [count, setCount] = useState(0);
+  const [client] = useState(
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            cacheTime: Infinity,
+            retry: false,
+          },
+        },
+      }),
+  )
 
   return (
-    <>
-      <div>
-        <header>
-          <h1>Prospect Flow</h1>
-        </header>
-        <nav className="nav-list">
-          Painel administrativo
-        </nav>
-        <main>
-          <AccordionHomePageWaiAriaPattern></AccordionHomePageWaiAriaPattern>
-        </main>
-        <footer>
-          <p>&copy; Todos os Direitos Reservados </p>
-        </footer>
-      </div>
-    </>
-  );
+      <QueryClientProvider client={client}>
+        <Dashboard />
+      </QueryClientProvider>
+  )
 }
 
-export default App;
+export default App
