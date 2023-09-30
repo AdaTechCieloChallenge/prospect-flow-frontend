@@ -9,6 +9,12 @@ If clone, just run locally after the cloning process:
 npm install
 ```
 
+1. Run ProspectFlowBackend first
+
+2. And then run the ProspectFlowFrontEnd
+
+3. Start adding some data.
+
 Its is going to install all dependencies required.
 To scaffold, keep reading.
 
