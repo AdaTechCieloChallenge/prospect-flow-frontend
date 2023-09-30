@@ -53,6 +53,7 @@ export function Dashboard() {
     }
 
     // @ts-ignore
+    // @ts-ignore
     return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             <Card className="flex flex-col w-[90%] lg:w-[64rem] flex-1  m-5 lg:m-4 p-[2rem] max-h-[96vh] ">
