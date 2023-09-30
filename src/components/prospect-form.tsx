@@ -13,8 +13,10 @@ import { Button } from './ui/button'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '@/lib/axios'
+import { toast } from 'react-toastify'
 
-/* Zod schema para validação dos dados */
 const NaturalPersonProspectSchema = z.object({
     mcc: z.string().max(4),
     cpf: z.string().length(11),
@@ -23,7 +25,6 @@ const NaturalPersonProspectSchema = z.object({
 })
 
 type NaturalPersonProspect = z.infer<typeof NaturalPersonProspectSchema>
-
 
 const LegalPersonProspectSchema = z.object({
     cnpj: z.string().length(14),
@@ -38,6 +39,7 @@ type LegalPersonProspect = z.infer<typeof LegalPersonProspectSchema>
 
 interface ProspectFormProps {
     prospect?: NaturalPersonProspect | LegalPersonProspect
+    onClose: () => void
 }
 
 interface ProspectFormInput extends LegalPersonProspect {}
@@ -80,7 +82,8 @@ function isCorporateProspect(
     return 'cnpj' in prospect && 'corporateName' in prospect
 }
 
-export function ProspectForm({ prospect }: ProspectFormProps) {
+export function ProspectForm({ prospect, onClose }: ProspectFormProps) {
+    const queryClient = useQueryClient()
     const [mode, setMode] = useState<'PF' | 'PJ'>(
         prospect
             ? isCorporateProspect(prospect) && prospect.corporateName
@@ -88,6 +91,7 @@ export function ProspectForm({ prospect }: ProspectFormProps) {
                 : 'PF'
             : 'PF',
     )
+
     const isEditing = prospect
 
     const { register, handleSubmit, reset } = useForm<ProspectFormInput>({
@@ -99,9 +103,63 @@ export function ProspectForm({ prospect }: ProspectFormProps) {
     })
 
     const onSubmit = (data: ProspectFormInput) => {
-        console.log(data)
+        if (!prospect) {
+            saveProspect.mutate(data)
+        } else {
+            updateProspect.mutate(data)
+        }
         reset()
+        onClose()
     }
+
+    const saveProspect = useMutation({
+        mutationFn: (data: ProspectFormInput) => {
+            return mode === 'PJ'
+                ? api.post('create-legal-person', data)
+                : api.post('create-natural-person', data)
+        },
+        onSuccess: () => {
+            toast.success('Cadastrado.', {
+                position: 'bottom-right',
+                theme: 'colored',
+                autoClose: 3000,
+            })
+            queryClient.invalidateQueries(['prospects'])
+        },
+        onError: () => {
+            toast.error('Houve um problema.', {
+                position: 'bottom-right',
+                theme: 'colored',
+                autoClose: 3000,
+            })
+        },
+    })
+
+    const updateProspect = useMutation({
+        mutationFn: (data: ProspectFormInput) => {
+            return api.put('update', data, {
+                params: {
+                    cnpjOrCpf: data.cnpj || data.cpf,
+                    clientType: data.cnpj ? 'pj' : 'pf',
+                },
+            })
+        },
+        onSuccess: () => {
+            toast.success('Atualizado.', {
+                position: 'bottom-right',
+                theme: 'colored',
+                autoClose: 3000,
+            })
+            queryClient.invalidateQueries(['prospects'])
+        },
+        onError: () => {
+            toast.error('Houve um problema.', {
+                position: 'bottom-right',
+                theme: 'colored',
+                autoClose: 3000,
+            })
+        },
+    })
 
     return (
         <DialogContent className="bg-white gap-0 max-w-[90%]  md:max-w-fit">
@@ -222,10 +280,13 @@ export function ProspectForm({ prospect }: ProspectFormProps) {
                         type={'button'}
                         variant="outline"
                         className="rounded text-primary hover:text-primary"
+                        onClick={() => onClose()}
                     >
                         Cancelar
                     </Button>
-                    <Button className="rounded">Cadastrar</Button>
+                    <Button className="rounded">
+                        {prospect ? 'Editar' : 'Cadastrar'}
+                    </Button>
                 </div>
             </form>
         </DialogContent>

@@ -2,7 +2,6 @@ import { api } from '@/lib/axios'
 import { UseQueryOptions, useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
-//Clent-Side Validation with Zod
 const prospectSchema = z.object({
     uuid: z.string(),
     cnpj: z.string().optional(),
